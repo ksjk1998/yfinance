@@ -31,7 +31,7 @@ from . import shared
 
 def download(tickers, start=None, end=None, actions=False, threads=True,
              group_by='column', auto_adjust=False, back_adjust=False,
-             progress=True, period="max", interval="1d", prepost=False,
+             progress=True, silent=False, period="max", interval="1d", prepost=False,
              proxy=None, rounding=False, **kwargs):
     """Download yahoo tickers
     :Parameters:
@@ -64,6 +64,8 @@ def download(tickers, start=None, end=None, actions=False, threads=True,
             Optional. Proxy server URL scheme. Default is None
         rounding: bool
             Optional. Round values to 2 decimal places?
+	silent = bool
+	    Optional. does not allow errors like \'Failed download\' to print for a more silent output
     """
 
     # create ticker list
@@ -108,7 +110,7 @@ def download(tickers, start=None, end=None, actions=False, threads=True,
     if progress:
         shared._PROGRESS_BAR.completed()
 
-    if shared._ERRORS:
+    if shared._ERRORS and not silent:
         print('\n%.f Failed download%s:' % (
             len(shared._ERRORS), 's' if len(shared._ERRORS) > 1 else ''))
         # print(shared._ERRORS)
